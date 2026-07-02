@@ -1,20 +1,18 @@
-name: Python package
+name: ARC scale test
 
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: linux-x86-small
+  fanout:
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.12", "3.14"]
-
+        n: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    runs-on: linux-x64-small
     steps:
-      - uses: actions/checkout@v6
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      # You can test your matrix by printing the current Python version
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+      - run: |
+          echo "runner=$RUNNER_NAME"
+          echo "job=${{ github.job }}"
+          echo "run_id=${{ github.run_id }}"
+          sleep 180
